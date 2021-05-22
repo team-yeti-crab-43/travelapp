@@ -4,7 +4,7 @@
   "description": "Cost calculator for travel. Scratch project.",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server/server.js", 
     "build": "webpack",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon server/server.js\" \"webpack serve --open --progress --content-base ./\"",
     "serve": "webpack serve"
@@ -24,7 +24,8 @@
     "axios": "^0.21.1",
     "express": "^4.17.1",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "unirest": "^0.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
