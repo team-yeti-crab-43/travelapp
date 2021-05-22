@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Search from './Search.jsx';
+import Results from './Results.jsx';
 
 class App extends Component{
 
@@ -23,6 +25,8 @@ class App extends Component{
       return(
       <div>
           <h2>CUT BUNDLE</h2>
+          <Search />
+          <Results />
       </div>
       );
    }

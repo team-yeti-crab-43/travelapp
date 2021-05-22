@@ -13,6 +13,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/test', (req, res) => {
+  
   console.log(req.body);
   return res.status(200).json('hello');
 }); 
