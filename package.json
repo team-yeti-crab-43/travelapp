@@ -4,7 +4,7 @@
   "description": "Cost calculator for travel. Scratch project.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/server.js", 
+    "start": "nodemon server/server.js",
     "build": "webpack",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon server/server.js\" \"webpack serve --open --progress --content-base ./\"",
     "serve": "webpack serve"
