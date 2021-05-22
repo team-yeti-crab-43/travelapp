@@ -32,7 +32,7 @@ class App extends Component{
   render(){
       return(
       <div>
-          <h2>CUT BUNDLE</h2>
+          <h2>Welcome to Travelwire</h2>
           <Search />
           <Results flightPrice={this.state.flights}/>
       </div>
