@@ -14,10 +14,12 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/test', (req, res) => {
-  let request = unirest("GET", "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/UK/2021-09-01");
+  console.log(req.body)
+  const {destination, flightDate, returnDate} = req.body
+  let request = unirest("GET", "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+destination+"/"+flightDate);
   
   request.query({
-    "inboundpartialdate": "2021-12-01"
+    "inboundpartialdate": returnDate
   });
   
   request.headers({
@@ -28,7 +30,7 @@ app.post('/api/test', (req, res) => {
 
   request.end(function (response) {
     if (response.error) throw new Error(response.error);
-      console.log(response.body)
+      console.log(response.body.Quotes)
       res.status(200).json({info: response.body.Quotes[0].MinPrice});
       // return res.body;
   })
