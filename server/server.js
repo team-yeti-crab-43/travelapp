@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/test', (req, res) => {
   console.log(req.body)
-  const {destination, flightDate, returnDate} = req.body
+  const {destination, flightDate, returnDate} = req.body  //variables have to be renamed according to what you call them in the request data
   let request = unirest("GET", "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+destination+"/"+flightDate);
   
   request.query({
