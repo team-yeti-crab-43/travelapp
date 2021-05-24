@@ -37,7 +37,7 @@ const Results = props => {
       </div>
       <div name="hotels" style={boxStyle}>
         <strong>Hotels Starting At: </strong>
-        <p>*hotel prices passed in from API here*</p>
+        <p>{props.hotelPrice}</p>
       </div>
       <div name="results" style={resultStyle}>
         <strong>Your Trip Starts From: </strong>
