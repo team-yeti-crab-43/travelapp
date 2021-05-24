@@ -33,6 +33,7 @@ const Search = props => {
   const handleSubmit= (e) => {
     e.preventDefault();
     console.log(destination, startDate, endDate);
+    props.getResults([destination, startDate, endDate])
   }
   
   
