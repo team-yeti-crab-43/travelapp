@@ -26,7 +26,7 @@ req.headers({
 req.end(function (res) {
 	if (res.error) throw new Error(res.error);
 
-	console.log(res.jsonbody[searchResults][results][0]);
+	console.log(res.body.searchResults.results[0].ratePlan.price.current);
 });
 
 

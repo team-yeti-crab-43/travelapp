@@ -6,36 +6,61 @@ import Results from './Results.jsx';
 class App extends Component{
   constructor(props) {
     super(props)
-    this.state = {flights: null};
+    this.state = {flights: null, hotels: null, showResults: false, numPeople: 0};
     this.getResults = this.getResults.bind(this);
   }
 
   
   getResults(data) {
     const searchInfo = {airportLocation: `${data[0]}`, startDate: `${data[1]}`, endDate: `${data[2]}`}
-    fetch('/api/test', {
+    this.setState({numPeople: Number(data[3])});
+    fetch('/api/hotels', {
       method: "POST",
       headers: {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify(searchInfo)
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log(data)
-    this.setState({flights: data.info});
-  })
-  .catch(e=>{
-    console.log('error', e)  // returns this if error
-  })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      this.setState({hotels: data.info});
+    })
+    .catch(e=>{
+      console.log('error', e)  // returns this if error
+    })
+
+    fetch('/api/flights', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(searchInfo)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      this.setState({flights: data.info, showResults: true});
+    })
+    .catch(e=>{
+      console.log('error', e)  // returns this if error
+    })
+  }
+  
+
+  appContainerStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+
   }
 
   render(){
       return(
-      <div>
-          <h2>Welcome to Travelwire</h2>
+      <div style={this.appContainerStyle}>
+          <h2 style={{fontFamily: "arial"}}>Welcome to Travelwire</h2>
           <Search getResults={this.getResults}/>
-          <Results flightPrice={this.state.flights} />
+          {this.state.showResults && <Results hotelPrice={this.state.hotels} flightPrice={this.state.flights} people={this.state.numPeople}/>}
       </div>
       );
    }

@@ -18,15 +18,22 @@ app.get('/', (req, res) => {
 
 
 
-app.post('/api/test', (req, res) => {
+app.post('/api/flights', (req, res) => {
   // console.log(req.body)
   const {airportLocation, startDate, endDate} = req.body  //variables have to be renamed according to what you call them in the request data
   console.log('destination :'+ airportLocation, 'flightDate: '+startDate, 'returndate : '+endDate)
-  let request = unirest("GET", "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+airportLocation+"/"+startDate);
+  let destination; 
+
+  if (airportLocation === 'LHR') {
+    destination = 'LHR-sky';
+  } else if (airportLocation === 'DXB') {
+    destination = 'DXB-sky';
+  }
+
+  let request = unirest("GET", "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+destination+"/"+startDate);
 
   // "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/UK/2021-09-01" sample
   // "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+airportLocation+"/"+startDate concat
-
   
   request.query({
     "inboundpartialdate": endDate
@@ -50,46 +57,55 @@ app.post('/api/test', (req, res) => {
   // return res.status(200).json('hello');
 });
 
-
-
-
-// app.post('/api/test', (req, res) => { //make up another variable on front end, city 
-//   // console.log(req.body)
-//   const {city, startDate, endDate} = req.body  //variables have to be renamed according to what you call them in the request data
-//   console.log('destination :'+ city, 'flightDate: '+startDate, 'returndate : '+endDate)
-//   let request = unirest("GET", "https://hotels-com-provider.p.rapidapi.com/v1/hotels/search?sort_order=PRICE&checkout_date=2021-10-01&locale=en_US&currency=USD&adults_number=1&destination_id=11594&checkin_date=2021-09-01");
-
-//   // "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/UK/2021-09-01" sample
-//   // "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+airportLocation+"/"+startDate concat
-
-
-//   request.query({
-//     "sort_order": "PRICE",
-//     "checkout_date": endDate,
-//     "locale": "en_US",
-//     "currency": "USD",
-//     "adults_number": "1",
-//     "destination_id": "11594", // Dubai London: 549499
-//     "checkin_date": startDate
-//   });
+app.post('/api/hotels', (req, res) => {
   
-//   req.headers({
-//     "x-rapidapi-key": "e15b5e2e5dmshc81eceff76fe168p18f7e3jsn43a131d13978",
-//     "x-rapidapi-host": "hotels-com-provider.p.rapidapi.com",
-//     "useQueryString": true
-//   });
+  const {airportLocation, startDate, endDate} = req.body  //variables have to be renamed according to what you call them in the request data
+  // let airportLocation = 'LHR';
+  // let startDate = '2021-09-01';
+  // let endDate = '2021-10-01';
+  console.log('airportLocation :'+ airportLocation, 'flightDate: '+startDate, 'returndate : '+endDate)
 
-//   request.end(function (response) {
-//     if (response.error) {
-//     // throw new Error(response.error);
-//     return res.status(400)
-//     }
-//       // console.log(response.body.Quotes)
-//       res.status(200).json({info: response.body.Quotes[0].MinPrice});
-//       // return res.body;
-//   })
-//   // return res.status(200).json('hello');
-// }); 
+
+  //LHR for airportLocation, convert to destination ID of London which is 549499
+  //DXB for airportLocation, convert to destination ID of Dubai which is 11594
+  //DME for airportLocation, convert to destination ID of Moscow which is 1708350
+
+  let destination; 
+
+  if (airportLocation === 'LHR') {
+    destination = '549499';
+  } else if (airportLocation === 'DXB') {
+    destination = '11594';
+  }
+  // } else if (airportLocation === 'DME') {
+  //   destination = '1708350';
+  // }
+
+  console.log('destination :'+ destination, 'flightDate: '+startDate, 'returndate : '+endDate)
+
+  let request = unirest("GET", "https://hotels-com-provider.p.rapidapi.com/v1/hotels/search?sort_order=PRICE&checkout_date="+endDate+"&locale=en_US&currency=USD&adults_number=1&destination_id="+destination+"&checkin_date="+startDate);
+  
+  request.headers({
+    "x-rapidapi-key": "e15b5e2e5dmshc81eceff76fe168p18f7e3jsn43a131d13978",
+    "x-rapidapi-host": "hotels-com-provider.p.rapidapi.com",
+    "useQueryString": true
+  });
+  
+  request.end(function (response) {
+    if (response.error) {
+    // throw new Error(response.error);
+    return res.status(400)
+    }
+      // console.log(response.body.Quotes)
+      res.status(200).json({info: response.body.searchResults.results[0].ratePlan.price.current});
+      // return res.body;
+  })
+});
+
+
+
+
+
 
 
 app.listen(3000);
