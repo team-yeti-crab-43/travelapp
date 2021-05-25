@@ -37,11 +37,11 @@ const Results = props => {
       </div>
       <div name="hotels" style={boxStyle}>
         <strong>Hotels Starting At: </strong>
-        <p>{props.hotelPrice}</p>
+        <p>${props.hotelPrice} Per Day</p>
       </div>
       <div name="results" style={resultStyle}>
         <strong>Your Trip Starts From: </strong>
-        <p><strong>${props.flightPrice * props.people}</strong></p>
+        <p><strong>${props.flightPrice * props.people + props.people * props.days * Number(props.hotelPrice)}</strong></p>
       </div>
     </div>
   )

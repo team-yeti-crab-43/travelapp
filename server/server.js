@@ -21,16 +21,16 @@ app.get('/', (req, res) => {
 app.post('/api/flights', (req, res) => {
   // console.log(req.body)
   const {airportLocation, startDate, endDate} = req.body  //variables have to be renamed according to what you call them in the request data
-  console.log('destination :'+ airportLocation, 'flightDate: '+startDate, 'returndate : '+endDate)
-  let destination; 
+  // console.log('destination :'+ airportLocation, 'flightDate: '+startDate, 'returndate : '+endDate)
+  // let destination; 
 
-  if (airportLocation === 'LHR') {
-    destination = 'LHR-sky';
-  } else if (airportLocation === 'DXB') {
-    destination = 'DXB-sky';
-  }
+  // if (airportLocation === 'LHR') {
+  //   destination = 'LHR-sky';
+  // } else if (airportLocation === 'DXB') {
+  //   destination = 'DXB-sky';
+  // }
 
-  let request = unirest("GET", "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+destination+"/"+startDate);
+  let request = unirest("GET", "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+airportLocation+"/"+startDate);
 
   // "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/UK/2021-09-01" sample
   // "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/US/USD/en-US/LAX-sky/"+airportLocation+"/"+startDate concat
@@ -63,7 +63,7 @@ app.post('/api/hotels', (req, res) => {
   // let airportLocation = 'LHR';
   // let startDate = '2021-09-01';
   // let endDate = '2021-10-01';
-  console.log('airportLocation :'+ airportLocation, 'flightDate: '+startDate, 'returndate : '+endDate)
+  // console.log('airportLocation :'+ airportLocation, 'flightDate: '+startDate, 'returndate : '+endDate)
 
 
   //LHR for airportLocation, convert to destination ID of London which is 549499
@@ -76,10 +76,9 @@ app.post('/api/hotels', (req, res) => {
     destination = '549499';
   } else if (airportLocation === 'DXB') {
     destination = '11594';
+  } else if (airportLocation === 'DME') {
+    destination = '1708350';
   }
-  // } else if (airportLocation === 'DME') {
-  //   destination = '1708350';
-  // }
 
   console.log('destination :'+ destination, 'flightDate: '+startDate, 'returndate : '+endDate)
 
@@ -93,10 +92,12 @@ app.post('/api/hotels', (req, res) => {
   
   request.end(function (response) {
     if (response.error) {
+      console.log("Error here", response.error)
     // throw new Error(response.error);
     return res.status(400)
     }
       // console.log(response.body.Quotes)
+      console.log(response.body);
       res.status(200).json({info: response.body.searchResults.results[0].ratePlan.price.current});
       // return res.body;
   })
